@@ -1,183 +1,202 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MAGMA GAMES</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Magma Games</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#101114;color:white;font-family:Arial,sans-serif}
-header{background:#191a20;padding:18px;display:flex;gap:16px;
-align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:5}
-.logo{font-size:25px;font-weight:900;color:#ff5b35}
-input{padding:13px;border:1px solid #383943;border-radius:12px;
-background:#24252d;color:white;flex:1;min-width:150px}
-button{cursor:pointer;border:0;border-radius:10px;padding:11px 15px;
-background:#30313b;color:white;font-weight:bold}
-button:hover{background:#ff5838}
-nav{display:flex;gap:9px;padding:15px;flex-wrap:wrap}
-main{padding:15px}
-h2{margin-top:26px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:15px}
-.game{background:#202129;border-radius:15px;overflow:hidden;cursor:pointer;
-border:1px solid #30313b;transition:.2s}
-.game:hover{transform:translateY(-4px);border-color:#ff5838}
-.cover{height:125px;display:grid;place-items:center;font-size:50px;
-background:linear-gradient(135deg,#34313d,#652d32)}
-.info{padding:12px}
-.info small{color:#aaa}
-#player{display:none;margin:15px;padding:15px;background:#202129;border-radius:15px}
-#screen{height:330px;background:#101115;border-radius:10px;overflow:hidden;
-position:relative;display:grid;place-items:center;text-align:center}
-#race{display:none;width:100%;height:100%;background:linear-gradient(#24293c,#171820)}
-#road{position:absolute;left:25%;width:50%;height:150%;top:-20%;
-background:#444;clip-path:polygon(35% 0,65% 0,100% 100%,0 100%)}
-.car{position:absolute;bottom:30px;left:46%;font-size:38px;z-index:2}
-#virus{display:none;position:fixed;inset:0;background:#080000;
-z-index:20;color:#ff2929;font-family:monospace;padding:20px;overflow:auto}
-.err{border:1px solid #ff2929;padding:10px;margin:8px 0;
-background:#250000;animation:flicker .5s infinite alternate}
-@keyframes flicker{to{background:#500000;color:#fff}}
-#virus h1{font-size:clamp(28px,7vw,60px)}
-#virus button{background:#ff2929;color:black}
-footer{padding:25px;color:#888;text-align:center}
+body{margin:0;background:#111218;color:#f7f7fb;font-family:Arial,sans-serif}
+header{height:auto;min-height:75px;background:#191a22;display:flex;
+align-items:center;gap:18px;padding:15px 4%;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:900;color:#ff653d}
+input{flex:1;min-width:180px;background:#282a35;border:1px solid #3b3d49;
+border-radius:12px;padding:13px;color:white;font-size:15px}
+button{border:0;border-radius:10px;padding:11px 15px;background:#292b36;
+color:white;cursor:pointer;font-weight:bold}
+button:hover,.active{background:#ff653d;color:#111}
+.hero{margin:22px 4%;min-height:245px;border-radius:20px;padding:30px;
+background:radial-gradient(ellipse at 75% 50%,#873b2e,transparent 55%),
+linear-gradient(115deg,#29212a,#171820);display:flex;align-items:center;
+justify-content:space-between;gap:20px;overflow:hidden}
+.hero h1{font-size:clamp(30px,5vw,52px);margin:0 0 12px}
+.hero p{color:#c5c5d0}
+.hero-art{font-size:clamp(65px,12vw,120px)}
+main{padding:0 4% 35px}
+nav{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0}
+h2{font-size:23px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:17px}
+.card{background:#1d1e27;border:1px solid #2d2f39;border-radius:15px;
+overflow:hidden;transition:transform .2s,border .2s}
+.card:hover{transform:translateY(-4px);border-color:#ff653d}
+.cover{height:145px;display:grid;place-items:center;font-size:65px;
+position:relative;background:linear-gradient(135deg,var(--a),var(--b))}
+.cover:after{content:"";position:absolute;inset:0;
+background:linear-gradient(0deg,#1118,transparent 65%)}
+.cover span{filter:drop-shadow(0 6px 9px #0008)}
+.details{padding:13px}
+.details h3{font-size:16px;margin:2px 0 7px}
+.muted{font-size:12px;color:#aaaab8}
+.actions{display:flex;gap:7px;margin-top:12px}
+.play{background:#ff653d;color:#151515;flex:1}
+.fav{font-size:18px}
+#empty{color:#aaa;display:none;padding:20px 0}
+footer{text-align:center;padding:25px;color:#858593;border-top:1px solid #292a33}
+#player{display:none;background:#1c1d26;padding:18px;border-radius:16px;margin:20px 0}
+#gameFrame{width:100%;height:min(70vh,650px);border:0;border-radius:12px;background:#101116}
+@media(max-width:500px){.hero{padding:22px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cover{height:110px}.details{padding:9px}}
 </style>
 </head>
 <body>
 <header>
   <div class="logo">🔥 MAGMA</div>
-  <input id="search" placeholder="🔍 Найти игру..." oninput="render()">
-  <button onclick="showFavorites()">♥ Избранное</button>
-  <button onclick="toggleVirus()">☣ СИМУЛЯЦИЯ</button>
+  <input id="search" placeholder="Search games..." autocomplete="off">
+  <button id="favoritesBtn">♥ Favorites</button>
 </header>
 
-<nav>
-  <button onclick="setCategory('Все')">Все игры</button>
-  <button onclick="setCategory('3D')">3D</button>
-  <button onclick="setCategory('Гонки')">Гонки</button>
-  <button onclick="setCategory('Аркады')">Аркады</button>
-  <button onclick="setCategory('Избранное')">♥ Избранное</button>
-</nav>
+<section class="hero">
+ <div>
+  <p>YOUR NEXT FAVORITE GAME</p>
+  <h1>Ready. Set. Play.</h1>
+  <p>Discover awesome games and jump straight into the action.</p>
+  <button class="play" onclick="openGame('Bloxd.io')">Play Featured Game →</button>
+ </div>
+ <div class="hero-art">🎮</div>
+</section>
 
 <main>
-  <h2 id="heading">🔥 Популярные игры</h2>
-  <div class="grid" id="games"></div>
+ <nav id="categories">
+  <button class="active" data-cat="All">All Games</button>
+  <button data-cat="3D">3D Games</button>
+  <button data-cat="Racing">Racing</button>
+  <button data-cat="Action">Action</button>
+  <button data-cat="Sandbox">Sandbox</button>
+  <button data-cat="Arcade">Arcade</button>
+ </nav>
 
-  <section id="player">
-    <button onclick="closeGame()">← Назад</button>
-    <h2 id="gameTitle">Игра</h2>
-    <div id="screen">
-      <div id="race">
-        <div id="road"></div>
-        <div class="car">🏎️</div>
-      </div>
-      <div id="gameMessage">Выбери игру</div>
-    </div>
-    <p id="gameDescription"></p>
-  </section>
+ <h2 id="sectionTitle">🔥 Popular Games</h2>
+ <div class="grid" id="games"></div>
+ <p id="empty">No games found. Try another search.</p>
+
+ <section id="player">
+  <button onclick="closeGame()">← Back to Games</button>
+  <h2 id="playerTitle"></h2>
+  <iframe id="gameFrame" title="Game window"
+   allow="fullscreen; autoplay; gamepad" referrerpolicy="strict-origin-when-cross-origin"
+   style="display:none"></iframe>
+  <p id="playerNote" class="muted"></p>
+ </section>
 </main>
 
-<div id="virus">
-  <h1>⚠ SYSTEM FAILURE</h1>
-  <h2>DEN HÄR DATORN ÄR REDAN HACKAD</h2>
-  <p>MAGMA SECURITY SIMULATION // FAKE ALERTS</p>
-  <div id="errors"></div>
-  <button onclick="toggleVirus()">ЗАКРЫТЬ СИМУЛЯЦИЮ</button>
-  <p>Это постановочный эффект на странице. Система не заражена.</p>
-</div>
-
-<footer>MAGMA GAMES © 2026 · Играй и исследуй</footer>
-
-<script>
-const games=[
- {name:"3D Street Racer",cat:"Гонки",icon:"🏎️",own:true},
- {name:"Bloxd.io",cat:"3D",icon:"🧱",url:"https://bloxd.io/"},
- {name:"Minecraft Classic",cat:"3D",icon:"⛏️",url:"https://classic.minecraft.net/"},
- {name:"2048",cat:"Аркады",icon:"🔢",url:"https://play2048.co/"},{name:"Geometry Dash",cat:"Аркады",icon:"🟪",url:"https://www.robtopgames.com/"},
- {name:"Paper.io",cat:"Аркады",icon:"🟦",url:"https://paper-io.com/"},
- {name:"Slope",cat:"Гонки",icon:"🔴",url:"https://slopegame.com/"},
- {name:"Space Adventure",cat:"3D",icon:"🚀",own:true}
+<footer>MAGMA GAMES · PLAY MORE, HAVE FUN.</footer><script>
+const catalog=[
+ {name:"Bloxd.io",cat:"Sandbox",icon:"🧱",a:"#246e85",b:"#28334f",url:"https://bloxd.io/"},
+ {name:"Smash Karts",cat:"Racing",icon:"🏎️",a:"#a94a32",b:"#4a245f",url:"https://www.crazygames.com/game/smash-karts"},
+ {name:"Drift Hunters",cat:"Racing",icon:"🏁",a:"#247b7d",b:"#172a48",url:"https://www.crazygames.com/game/drift-hunters"},
+ {name:"Moto X3M",cat:"Racing",icon:"🏍️",a:"#ba7131",b:"#692b36",url:"https://www.crazygames.com/game/moto-x3m"},
+ {name:"Crazy Roll 3D",cat:"3D",icon:"🔮",a:"#355eb4",b:"#44256c",url:"https://www.crazygames.com/game/crazy-roll-3d"},
+ {name:"Slope",cat:"3D",icon:"🔴",a:"#258e94",b:"#22244b",url:"https://www.crazygames.com/game/slope"},
+ {name:"Miniblox",cat:"Sandbox",icon:"🌎",a:"#4a8a59",b:"#23444e",url:"https://miniblox.io/"},
+ {name:"DEADSHOT.io",cat:"Action",icon:"🎯",a:"#8d3939",b:"#25243d",url:"https://deadshot.io/"},
+ {name:"Shell Shockers",cat:"Action",icon:"🥚",a:"#bd8b38",b:"#57402b",url:"https://shellshock.io/"},
+ {name:"Ships 3D",cat:"3D",icon:"🚢",a:"#397b9b",b:"#203149",url:"https://www.crazygames.com/game/ships-3d"},
+ {name:"Paper.io 2",cat:"Arcade",icon:"🟦",a:"#315bb3",b:"#3b3670",url:"https://paper-io.com/"},
+ {name:"2048",cat:"Arcade",icon:"🔢",a:"#ad8145",b:"#674c38",url:"https://play2048.co/"}
 ];
-let category="Все",favorites=JSON.parse(localStorage.getItem("magmaFav")||"[]");
+let category="All",onlyFavorites=false;
+let favorites=[];
+try{favorites=JSON.parse(localStorage.getItem("magmaFavorites")||"[]")}catch(e){}
+const grid=document.getElementById("games");
+const search=document.getElementById("search");
+
 function render(){
- const q=document.getElementById("search").value.toLowerCase();
- const list=games.filter(g=>(category==="Все"g.cat===category
- (category==="Избранное"&&favorites.includes(g.name)))&&g.name.toLowerCase().includes(q));
- document.getElementById("heading").textContent=category==="Все"?"🔥 Популярные игры":category;
- document.getElementById("games").innerHTML=list.map(g=>
- <article class="game">
-  <div onclick="openGame('${g.name}')" class="cover">${g.icon}</div>
-  <div class="info">
-   <b onclick="openGame('${g.name}')">${g.name}</b><br>
-   <small>${g.cat}</small><br><br>
-   <button onclick="openGame('${g.name}')">Играть ▶</button>
-   <button onclick="favorite('${g.name}')">${favorites.includes(g.name)?"♥":"♡"}</button>
-  </div>
- </article>).join("")||"<p>Игры не найдены.</p>";
+ const q=search.value.trim().toLowerCase();
+ const shown=catalog.filter(g=>
+ (category==="All"||g.cat===category)&&
+ (!onlyFavorites||favorites.includes(g.name))&&
+ g.name.toLowerCase().includes(q));
+ document.getElementById("sectionTitle").textContent=
+ onlyFavorites?"♥ Your Favorites":category==="All"?"🔥 Popular Games":category+" Games";
+ grid.innerHTML="";
+ document.getElementById("empty").style.display=shown.length?"none":"block";
+ shown.forEach(g=>{
+  const card=document.createElement("article");
+  card.className="card";
+  const cover=document.createElement("div");
+  cover.className="cover";
+  cover.style.setProperty("--a",g.a);
+  cover.style.setProperty("--b",g.b);
+  const emoji=document.createElement("span");
+  emoji.textContent=g.icon;
+  cover.appendChild(emoji);
+  const details=document.createElement("div");
+  details.className="details";
+  const title=document.createElement("h3");
+  title.textContent=g.name;
+  const tag=document.createElement("span");
+  tag.className="muted";
+  tag.textContent=g.cat+" Game";
+  const actions=document.createElement("div");
+  actions.className="actions";
+  const play=document.createElement("button");
+  play.className="play";
+  play.textContent="Play Now";
+  play.onclick=()=>openGame(g.name);
+  const fav=document.createElement("button");
+  fav.className="fav";
+  fav.textContent=favorites.includes(g.name)?"♥":"♡";
+  fav.setAttribute("aria-label","Toggle favorite");
+  fav.onclick=()=>toggleFavorite(g.name);
+  actions.append(play,fav);
+  details.append(title,tag,actions);
+  card.append(cover,details);
+  cover.onclick=()=>openGame(g.name);
+  title.onclick=()=>openGame(g.name);
+  title.style.cursor="pointer";
+  grid.appendChild(card);
+ });
 }
-function setCategory(c){category=c;render()}
-function showFavorites(){setCategory("Избранное")}
-function favorite(n){
- favorites=favorites.includes(n)?favorites.filter(x=>x!==n):[...favorites,n];
- localStorage.setItem("magmaFav",JSON.stringify(favorites));render();
+function toggleFavorite(name){
+ favorites=favorites.includes(name)?favorites.filter(x=>x!==name):[...favorites,name];
+ try{localStorage.setItem("magmaFavorites",JSON.stringify(favorites))}catch(e){}
+ render();
 }
 function openGame(name){
- const g=games.find(x=>x.name===name);
- const p=document.getElementById("player");
- p.style.display="block";
- document.getElementById("gameTitle").textContent=name;
- document.getElementById("race").style.display="none";
- document.getElementById("gameMessage").style.display="block";
- document.getElementById("gameDescription").textContent="";
- if(g.own){
-   document.getElementById("gameMessage").style.display="none";
-   document.getElementById("race").style.display="block";
-   document.getElementById("gameDescription").textContent=
-   "Твоя мини-гонка! Нажимай ← и → на клавиатуре, чтобы двигаться.";
- }else{
-   document.getElementById("gameMessage").innerHTML=
-   "🌐 Настоящая игра<br><br><button onclick=\"launch('${g.url}')\">Открыть игру ↗</button>";
-   document.getElementById("gameDescription").textContent=
-   "Игра откроется на официальном сайте. Встраивание зависит от настроек сайта.";
- }
- p.scrollIntoView({behavior:"smooth"});
+ const g=catalog.find(x=>x.name===name);
+ if(!g)return;
+ document.getElementById("player").style.display="block";
+ document.getElementById("playerTitle").textContent=g.name;
+ const frame=document.getElementById("gameFrame");
+ frame.style.display="none";
+ frame.src="about:blank";
+ document.getElementById("playerNote").textContent="Opening the official game page in a new tab. Some games block embedding on other websites.";
+ window.open(g.url,"_blank","noopener,noreferrer");
+ document.getElementById("player").scrollIntoView({behavior:"smooth"});
 }
-function launch(url){window.open(url,"_blank","noopener,noreferrer")}
-function closeGame(){document.getElementById("player").style.display="none"}
-document.addEventListener("keydown",e=>{
- if(!["ArrowLeft","ArrowRight"].includes(e.key))return;
- const car=document.querySelector(".car");
- if(document.getElementById("race").style.display==="block"){
-  let x=parseFloat(car.style.left)||46;
-  car.style.left=Math.max(5,Math.min(88,x+(e.key==="ArrowLeft"?-4:4)))+"%";
- }
+function closeGame(){
+ document.getElementById("player").style.display="none";
+}
+document.getElementById("categories").addEventListener("click",e=>{
+ const b=e.target.closest("button[data-cat]");
+ if(!b)return;
+ category=b.dataset.cat;
+ onlyFavorites=false;
+ document.getElementById("favoritesBtn").classList.remove("active");
+ document.querySelectorAll("#categories button").forEach(x=>x.classList.toggle("active",x===b));
+ render();
 });
-let virusTimer;
-function toggleVirus(){
- const v=document.getElementById("virus");
- if(v.style.display==="block"){
-  v.style.display="none";clearInterval(virusTimer);return;
+document.getElementById("favoritesBtn").onclick=()=>{
+ onlyFavorites=!onlyFavorites;
+ document.getElementById("favoritesBtn").classList.toggle("active",onlyFavorites);
+ if(onlyFavorites){
+  document.querySelectorAll("#categories button").forEach(x=>x.classList.remove("active"));
+ }else{
+  category="All";
+  document.querySelector('[data-cat="All"]').classList.add("active");
  }
- v.style.display="block";
- const messages=[
- "ERROR 0x80070005: ACCESS DENIED",
- "WARNING: FAKE SYSTEM ALERT",
- "CRITICAL ERROR: SIMULATION ACTIVE",
- "NETWORK STATUS: DEMO ONLY",
- "SECURITY SCAN: NO REAL CHANGES",
- "MEMORY ALERT: VISUAL EFFECT"
- ];
- const box=document.getElementById("errors");box.innerHTML="";
- let count=0;
- function addError(){
-  const el=document.createElement("div");el.className="err";
-  el.textContent=messages[count%messages.length];
-  box.prepend(el);count++;
-  while(box.children.length>12)box.lastChild.remove();
- }
- addError();virusTimer=setInterval(addError,700);
- setTimeout(()=>{clearInterval(virusTimer);v.style.display="none"},15000);
-}
+ render();
+};
+search.addEventListener("input",render);
 render();
 </script>
 </body>
