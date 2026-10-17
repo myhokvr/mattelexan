@@ -2,134 +2,339 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>matteläxan27</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#20232a}
-header{background:#171923;color:white;padding:22px;font-size:24px;font-weight:bold}
-main{padding:45px 25px}
-main p{color:#626775}
-.switch{position:absolute;right:20px;top:22px;display:flex;align-items:center;gap:10px;color:white;font-size:13px}
-.switch input{width:42px;height:23px;accent-color:#1684f8}
-#errors{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-.error{position:absolute;width:min(310px,90vw);background:#eee;color:#222;border:1px solid #888;box-shadow:0 5px 22px #0007;font-size:14px}
-.error-title{background:#0755a5;color:white;padding:10px}
-.error p{padding:10px}
-.error button{display:block;margin:0 12px 12px auto;padding:5px 20px;pointer-events:auto}
-#bsod{display:none;position:fixed;inset:0;overflow:auto;background:#0078d7;color:white;padding:9vh 10vw;font-family:"Segoe UI",Arial,sans-serif}
-#bsod .sad{font-size:100px;margin-bottom:25px}
-#bsod h2{font-size:28px;font-weight:400;line-height:1.4;max-width:700px}
-#bsod p{font-size:18px;line-height:1.6}
-@media(max-width:550px){header{padding:65px 18px 18px}.switch{left:18px;right:auto;top:18px}main{padding:30px 20px}#bsod{padding:8vh 7vw}#bsod .sad{font-size:75px}}
+body{margin:0;background:#090a0e;color:#f5f5f5;font-family:Arial,sans-serif}
+header{height:68px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;background:#111217;border-bottom:1px solid #292a32;gap:12px}
+.logo{font-size:22px;font-weight:900;letter-spacing:-1px}
+.logo span{color:#ff542e}
+.switch{display:flex;align-items:center;gap:9px;font-size:12px}
+.switch input{width:42px;height:22px;accent-color:#ff542e}
+button{border:0;cursor:pointer;font-weight:bold;border-radius:9px;padding:12px 16px}
+button:focus-visible{outline:2px solid white}
+.orange{background:#ff542e;color:white}
+.secondary{background:#252630;color:white}
+main{max-width:1100px;margin:auto;padding:28px 18px}
+.hero{background:linear-gradient(120deg,#26130f,#17141d 65%,#20232c);border:1px solid #49302b;border-radius:18px;padding:35px 25px;margin-bottom:24px}
+.eyebrow{color:#ff7456;font-weight:bold;font-size:12px;letter-spacing:2px}
+h1{font-size:clamp(30px,6vw,48px);margin:12px 0}
+p{color:#b9bbc8;line-height:1.6}
+.section-title{font-size:21px;margin:28px 0 15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:14px}
+.card{background:#15161d;border:1px solid #2b2c35;border-radius:13px;overflow:hidden}
+.thumb{height:110px;display:grid;place-items:center;font-size:45px;background:linear-gradient(135deg,#38201e,#191c2c)}
+.card-body{padding:13px}
+.card h3{font-size:15px;margin:0 0 10px}
+.card p{font-size:12px;margin:0 0 12px}
+.card button{width:100%}
+.hidden{display:none!important}
+#gamesPage{min-height:calc(100vh - 68px)}
+#gameArea{margin-top:18px;border:1px solid #333541;border-radius:14px;overflow:hidden;background:#080a10}
+#gameCanvas{display:block;width:100%;height:min(60vh,450px)}
+.gamehud{display:flex;justify-content:space-between;padding:12px;gap:8px;flex-wrap:wrap}
+#overlay{position:fixed;inset:0;z-index:20;background:#000d;display:grid;place-items:center;padding:20px}
+.dialog{width:min(420px,100%);background:#181922;border:1px solid #393a46;border-radius:16px;padding:25px;text-align:center}
+.dialog h2{margin-top:0}
+#errors{position:fixed;inset:0;z-index:30;pointer-events:none;overflow:hidden}
+.error{position:absolute;width:min(290px,88vw);background:#eee;color:#222;border:1px solid #888;box-shadow:0 6px 25px #000a;font-size:13px}
+.error-title{background:#164f9c;color:white;padding:10px}
+.error p{color:#222;padding:8px 12px}
+.error button{display:block;margin:0 12px 12px auto;padding:6px 22px;pointer-events:auto}
+#bsod{position:fixed;inset:0;z-index:40;display:none;overflow:auto;background:#0078d7;color:white;padding:9vh 10vw;font-family:"Segoe UI",Arial,sans-serif}
+#bsod .sad{font-size:100px}
+#bsod h2{font-weight:400;font-size:clamp(22px,4vw,34px);max-width:700px;line-height:1.4}
+#bsod p{color:white;font-size:17px}
+.mobileControls{display:flex;gap:10px}
+.mobileControls button{min-width:65px;background:#292b36;color:white;font-size:23px;touch-action:manipulation}
+footer{text-align:center;color:#747784;padding:30px;font-size:12px}
+@media(max-width:500px){header{padding:0 12px}.logo{font-size:18px}.switch{font-size:10px;gap:4px}main{padding:18px 12px}.hero{padding:25px 18px}}
 </style>
 </head>
 <body>
-<header>matteläxan27</header>
-
-<div class="switch">
-  <label for="solve">Lösa din matteläxa</label>
-  <input id="solve" type="checkbox">
-</div>
+<header>
+ <div class="logo">matteläxan<span>27</span></div>
+ <label class="switch">
+  <span>Lösa din matteläxa</span>
+  <input type="checkbox" id="virusToggle" aria-label="Lösa din matteläxa">
+ </label>
+</header>
 
 <main id="home">
-  <h1>Matteläxan</h1>
-  <p>Behöver du hjälp med din matteläxa?</p>
-  <p>Tryck på reglaget uppe i hörnet för att börja.</p>
+ <section class="hero">
+  <div class="eyebrow">DIN DIGITALA VÄRLD</div>
+  <h1>Välkommen till<br>matteläxan27.</h1>
+  <p>Din plats för webben, spel och annat kul.</p>
+  <button class="orange" id="enterButton">Utforska sidan →</button>
+ </section><h2 class="section-title">Populärt just nu</h2>
+ <div class="cards">
+  <article class="card">
+   <div class="thumb">📚</div>
+   <div class="card-body">
+    <h3>Mattehjälp</h3>
+    <p>Din digitala startsida.</p>
+    <button class="secondary" id="mathButton">Öppna</button>
+   </div>
+  </article>
+  <article class="card">
+   <div class="thumb">🌐</div>
+   <div class="card-body">
+    <h3>Webb</h3>
+    <p>Utforska internet.</p>
+    <button class="secondary" id="webButton">Öppna</button>
+   </div>
+  </article>
+ </div>
+ <footer>matteläxan27 · Din sida, din värld</footer>
+</main>
+
+<main id="gamesPage" class="hidden">
+ <div class="eyebrow">SECRET ARCADE · PRESS 9</div>
+ <h1>Game zone<span style="color:#ff542e">.</span></h1>
+ <p>Välj ett spel. Tryck på ESC för att gå tillbaka.</p>
+ <div class="cards">
+  <article class="card">
+   <div class="thumb">🏎️</div>
+   <div class="card-body">
+    <h3>3D Racing</h3>
+    <p>Kör, byt fil och undvik trafiken.</p>
+    <button class="orange" id="raceButton">PLAY NOW</button>
+   </div>
+  </article>
+  <article class="card">
+   <div class="thumb">🟠</div>
+   <div class="card-body">
+    <h3>Neon Dodge</h3>
+    <p>Undvik de fallande blocken.</p>
+    <button class="secondary" id="dodgeButton">PLAY NOW</button>
+   </div>
+  </article>
+ </div>
+
+ <section id="gameArea" class="hidden">
+  <div class="gamehud">
+   <strong id="gameName">3D Racing</strong>
+   <strong id="gameScore">Score: 0</strong>
+   <button class="secondary" id="exitGame">Exit game</button>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <div class="gamehud">
+   <div class="mobileControls">
+    <button id="left">◀</button>
+    <button id="right">▶</button>
+   </div>
+   <span id="controlsText">← → / A D to steer</span>
+   <button class="orange" id="restart">Restart</button>
+  </div>
+ </section>
+ <p><button class="secondary" id="backButton">← Back to matteläxan27</button></p>
 </main>
 
 <div id="errors"></div>
-
 <div id="bsod">
-  <div class="sad">:(</div>
-  <h2>Your device ran into a problem and needs to restart.</h2>
-  <p>We're just collecting some error info, and then we'll restart for you.</p>
-  <p id="percent">0% complete</p>
-  <p style="margin-top:45px;font-size:14px">
-    STOP CODE: CRITICAL_PROCESS_DIED
-  </p>
+ <div class="sad">:(</div>
+ <h2>Your device ran into a problem and needs to restart.</h2>
+ <p>We're just collecting some error info, and then we'll restart for you.</p>
+ <p id="percent">0% complete</p>
+ <p style="margin-top:40px;font-size:13px">STOP CODE: CRITICAL_PROCESS_DIED</p>
+ <button id="closeBsod" class="secondary">Close simulation</button>
+</div>
+
+<div id="overlay" class="hidden">
+ <div class="dialog">
+  <h2 id="dialogTitle">System error</h2>
+  <p id="dialogMessage">A visual error simulation is running.</p>
+  <button class="orange" id="dialogButton">Continue</button>
+ </div>
 </div>
 
 <script>
-const solve=document.getElementById('solve');
-const errors=document.getElementById('errors');
-const home=document.getElementById('home');
-const bsod=document.getElementById('bsod');
-const percent=document.getElementById('percent');
+const $=id=>document.getElementById(id);
+const home=$('home'), games=$('gamesPage');
+let mode='',running=false,raf=0,score=0,playerLane=1,obstacles=[];
+let keys={},last=0,spawn=0,gameType='race';
 
-const messages=[
-'Calculation service stopped working.',
-'Critical error in math_engine.exe',
-'Unable to solve equation.',
-'System warning: memory access violation',
-'Unexpected exception detected.',
-'Windows cannot complete this operation.',
-'CRITICAL_PROCESS_DIED',
-'Fatal system error.',
-'Error 0x80004005: Operation failed.',
-'System resource unavailable.'
-];
-
-let runId=0;
-
-solve.addEventListener('change',()=>{
- if(!solve.checked)return;
- const id=++runId;
- solve.disabled=true;
- let count=0;
-
- function spawn(){
-  if(id!==runId)return;
-
-  if(count>=28){
+function showGames(){
+ home.classList.add('hidden');
+ games.classList.remove('hidden');
+ $('gameArea').classList.add('hidden');
+ stopGame();
+}
+function showHome(){
+ stopGame();
+ games.classList.add('hidden');
+ home.classList.remove('hidden');
+}
+$('enterButton').onclick=showGames;
+$('backButton').onclick=showHome;
+$('mathButton').onclick=()=>{$('dialogTitle').textContent='Matteläxan';$('dialogMessage').textContent='Välkommen till matteläxan27!';$('overlay').classList.remove('hidden')};
+$('webButton').onclick=()=>window.open('https://www.google.com/','_blank','noopener');
+$('dialogButton').onclick=()=>$('overlay').classList.add('hidden');
+document.addEventListener('keydown',e=>{
+ if(e.key==='9'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)&&!e.repeat){
+  e.preventDefault();
+  if(games.classList.contains('hidden'))showGames();else showHome();
+ }
+ if(e.key==='Escape'){
+  if(!$('overlay').classList.contains('hidden'))$('overlay').classList.add('hidden');
+  else showHome();
+ }
+ if(['ArrowLeft','a','A'].includes(e.key))keys.left=true;
+ if(['ArrowRight','d','D'].includes(e.key))keys.right=true;
+ if(e.key===' ')keys.brake=true;
+});
+document.addEventListener('keyup',e=>{
+ if(['ArrowLeft','a','A'].includes(e.key))keys.left=false;
+ if(['ArrowRight','d','D'].includes(e.key))keys.right=false;
+ if(e.key===' ')keys.brake=false;
+});const virus=$('virusToggle');
+let virusRun=0;
+virus.addEventListener('change',()=>{
+ if(!virus.checked)return;
+ const id=++virusRun;
+ virus.disabled=true;
+ const messages=[
+ 'Calculation service stopped working.',
+ 'Critical error in math_engine.exe',
+ 'Unable to solve equation.',
+ 'System warning: memory access violation',
+ 'Unexpected exception detected.',
+ 'Windows cannot complete this operation.',
+ 'Fatal system error.',
+ 'System resource unavailable.'
+ ];
+ let n=0;
+ $('errors').replaceChildren();
+ function popup(){
+  if(id!==virusRun)return;
+  if(n>=24){
    setTimeout(()=>{
-    if(id!==runId)return;
-    errors.replaceChildren();
-    home.style.display='none';
-    bsod.style.display='block';
+    if(id!==virusRun)return;
+    $('errors').replaceChildren();
+    $('bsod').style.display='block';
     let p=0;
-    percent.textContent='0% complete';
-
-    const progress=setInterval(()=>{
-     if(id!==runId){clearInterval(progress);return}
+    $('percent').textContent='0% complete';
+    const interval=setInterval(()=>{
+     if(id!==virusRun){clearInterval(interval);return}
      p=Math.min(100,p+5);
-     percent.textContent=p+'% complete';
+     $('percent').textContent=p+'% complete';
      if(p>=100){
-      clearInterval(progress);
+      clearInterval(interval);
       setTimeout(()=>{
-       if(id!==runId)return;
-       bsod.style.display='none';
-       home.style.display='block';
-       solve.checked=false;
-       solve.disabled=false;
-      },1500);
+       if(id!==virusRun)return;
+       resetVirus();
+      },1200);
      }
-    },350);
-   },700);
+    },250);
+   },400);
    return;
   }
-
   const box=document.createElement('div');
   box.className='error';
-  box.style.left=Math.random()*Math.max(1,innerWidth-320)+'px';
-  box.style.top=Math.random()*Math.max(1,innerHeight-150)+'px';
-
+  box.style.left=Math.random()*Math.max(1,innerWidth-300)+'px';
+  box.style.top=Math.random()*Math.max(1,innerHeight-130)+'px';
   const title=document.createElement('div');
-  title.className='error-title';
-  title.textContent='System Error';
-
+  title.className='error-title';title.textContent='System Error';
   const msg=document.createElement('p');
-  msg.textContent=messages[count%messages.length];
-
+  msg.textContent=messages[n%messages.length];
   const btn=document.createElement('button');
-  btn.textContent='OK';
-  btn.onclick=()=>box.remove();box.append(title,msg,btn);
-  errors.appendChild(box);
-  count++;
-  setTimeout(spawn,180);
+  btn.textContent='OK';btn.onclick=()=>box.remove();
+  box.append(title,msg,btn);$('errors').appendChild(box);
+  n++;setTimeout(popup,180);
  }
- spawn();
+ popup();
 });
+function resetVirus(){
+ virusRun++;
+ $('errors').replaceChildren();
+ $('bsod').style.display='none';
+ virus.checked=false;virus.disabled=false;
+}
+$('closeBsod').onclick=resetVirus;
+
+function startGame(type){
+ stopGame();
+ gameType=type;score=0;playerLane=1;obstacles=[];spawn=0;last=performance.now();
+ $('gameName').textContent=type==='race'?'3D Racing':'Neon Dodge';
+ $('gameArea').classList.remove('hidden');
+ $('controlsText').textContent='← → / A D to steer';
+ running=true;
+ const c=$('gameCanvas'),ctx=c.getContext('2d');
+ function frame(now){
+  if(!running)return;
+  const d=Math.min((now-last)/1000,.04);last=now;
+  const w=c.clientWidth,h=c.clientHeight;
+  const px=window.devicePixelRatio||1;
+  if(c.width!==Math.round(w*px)||c.height!==Math.round(h*px)){
+   c.width=Math.round(w*px);c.height=Math.round(h*px);
+  }
+  ctx.setTransform(px,0,0,px,0,0);
+  const horizon=h*.35;
+  ctx.fillStyle='#86cfff';ctx.fillRect(0,0,w,h);
+  ctx.fillStyle='#41834b';ctx.fillRect(0,horizon,w,h-horizon);
+  const roadW=w*.8,center=w/2;
+  ctx.fillStyle='#30333d';
+  ctx.beginPath();ctx.moveTo(center-roadW*.08,horizon);ctx.lineTo(center+roadW*.08,horizon);ctx.lineTo(center+roadW/2,h);ctx.lineTo(center-roadW/2,h);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(center-roadW*.08,horizon);ctx.lineTo(center-roadW/2,h);ctx.moveTo(center+roadW*.08,horizon);ctx.lineTo(center+roadW/2,h);ctx.stroke();
+  for(let i=0;i<2;i++){
+   for(let j=0;j<10;j++){
+    let t=((j/10+score*.015)%1);
+    const y=horizon+(h-horizon)*t*t;
+    const x=center+(i-.5)*roadW*t;
+    ctx.fillStyle='#ffe9a1';
+    ctx.fillRect(x-2,y,4,Math.max(2,t*15));
+   }
+  }
+  if(keys.left)playerLane=Math.max(0,playerLane-2*d);
+  if(keys.right)playerLane=Math.min(2,playerLane+2*d);
+  score+=d*(keys.brake?20:60);
+  $('gameScore').textContent='Score: '+Math.floor(score);
+  spawn+=d;
+  if(spawn>.9){
+   spawn=0;
+   obstacles.push({lane:Math.floor(Math.random()*3),t:0});
+  }
+  obstacles.forEach(o=>o.t+=d*(keys.brake?.25:.5));
+  obstacles=obstacles.filter(o=>o.t<1.2);
+  function car(x,y,size,color){
+   ctx.fillStyle='#111';ctx.fillRect(x-size*.42,y-size*.1,size*.84,size*.95);
+   ctx.fillStyle=color;
+   ctx.fillRect(x-size*.35,y-size*.55,size*.7,size*1.25);
+   ctx.fillStyle='#aeeaff';
+   ctx.fillRect(x-size*.23,y-size*.4,size*.46,size*.25);
+  }
+  obstacles.forEach(o=>{
+   const t=Math.min(1,o.t),y=horizon+(h-horizon)*t*t;
+   const roadHere=roadW*t;
+   const x=center+(o.lane-1)*roadHere*.31;
+   car(x,y,10+t*36,'#ffc342');
+   if(t>.87&&Math.abs(playerLane-o.lane)<.45){
+    running=false;
+    ctx.fillStyle='#fff';ctx.font='bold 26px Arial';ctx.textAlign='center';
+    ctx.fillText('CRASH!',w/2,h/2);
+    $('controlsText').textContent='Crash! Press Restart to race again.';
+   }
+  });
+  const playerX=center+(playerLane-1)*roadW*.31;
+  car(playerX,h*.82,Math.max(30,w*.075),type==='race'?'#ff3c55':'#24d8f2');
+  if(running)raf=requestAnimationFrame(frame);
+ }
+ raf=requestAnimationFrame(frame);
+}
+function stopGame(){running=false;cancelAnimationFrame(raf)}
+$('raceButton').onclick=()=>startGame('race');
+$('dodgeButton').onclick=()=>startGame('dodge');
+$('restart').onclick=()=>startGame(gameType);
+$('exitGame').onclick=()=>{stopGame();$('gameArea').classList.add('hidden')};
+function bindHold(id,key){
+ const b=$(id);
+ b.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true});
+ for(const ev of ['pointerup','pointercancel','pointerleave'])
+  b.addEventListener(ev,()=>keys[key]=false);
+}
+bindHold('left','left');bindHold('right','right');
 </script>
 </body>
 </html>
